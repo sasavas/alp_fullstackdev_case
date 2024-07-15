@@ -24,3 +24,10 @@ Run the application
 dotnet run --project src/ForceGetCase.API
 ```
 
+On another terminal tab/window, go to web application project and run it.
+
+```bash
+cd ForceGetCaseFe
+ng serve
+```
+
