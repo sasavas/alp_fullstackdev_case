@@ -48,6 +48,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  goToRegister() {
+    this.router.navigate(['/register']);
+  }
+
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
@@ -55,7 +59,7 @@ export class LoginComponent implements OnInit {
       this.authService.authenticate(loginModel).subscribe({
         next: () => {
           this.message.success('Login successful!');
-          this.router.navigate(['welcome']);
+          this.router.navigate(['quote']);
         },
         error: (err) => {
           this.message.error('Login failed. Please check your credentials.');

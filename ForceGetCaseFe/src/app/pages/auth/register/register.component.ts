@@ -57,6 +57,10 @@ export class RegisterComponent implements OnInit {
     );
   }
 
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+
   checkPasswords(group: FormGroup) {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
