@@ -29,14 +29,6 @@ public class UsersController : ApiController
         return Ok(ApiResult<LoginResponseModel>.Success(await _userService.LoginAsync(loginUserModel)));
     }
 
-    [HttpPost("confirmEmail")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ConfirmEmailAsync(ConfirmEmailModel confirmEmailModel)
-    {
-        return Ok(ApiResult<ConfirmEmailResponseModel>.Success(
-            await _userService.ConfirmEmailAsync(confirmEmailModel)));
-    }
-
     [HttpPut("{id:guid}/changePassword")]
     public async Task<IActionResult> ChangePassword(Guid id, ChangePasswordModel changePasswordModel)
     {
