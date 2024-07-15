@@ -4,7 +4,7 @@ using ForceGetCase.Core.Entities;
 using ForceGetCase.DataAccess.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using N_Tier.Shared.Services;
+using ForceGetCase.Shared.Services;
 
 namespace ForceGetCase.DataAccess.Persistence;
 
@@ -16,10 +16,12 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser>
     {
         _claimService = claimService;
     }
-
-    public DbSet<TodoItem> TodoItems { get; set; }
-
-    public DbSet<TodoList> TodoLists { get; set; }
+    
+    public DbSet<Dimension> Dimensions { get; set; }
+    
+    public DbSet<Country> Countries { get; set; }
+    
+    public DbSet<Quote> Quotes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

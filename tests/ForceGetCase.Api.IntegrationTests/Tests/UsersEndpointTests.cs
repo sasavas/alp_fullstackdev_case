@@ -35,7 +35,6 @@ public class UsersEndpointTests
 
         var createModel = Builder<CreateUserModel>.CreateNew()
             .With(cu => cu.Email = "IntegrationTest@gmail.com")
-            .With(cu => cu.Username = "IntegrationTest")
             .With(cu => cu.Password = "Password.1!")
             .Build();
 
@@ -74,7 +73,6 @@ public class UsersEndpointTests
         var client = await _factory.CreateDefaultClientAsync();
         var createModel = Builder<CreateUserModel>.CreateNew()
             .With(cu => cu.Email = "nuyonu@gmail.com")
-            .With(cu => cu.Username = "Len")
             .With(cu => cu.Password = "Password.1!")
             .Build();
 
@@ -112,7 +110,7 @@ public class UsersEndpointTests
         // Arrange
         var client = await _factory.CreateDefaultClientAsync();
         var loginUserModel = Builder<LoginUserModel>.CreateNew()
-            .With(cu => cu.Username = UserConstants.DefaultUserDb.Username)
+            .With(cu => cu.Email = UserConstants.DefaultUserDb.Email)
             .With(cu => cu.Password = UserConstants.DefaultUserDb.Password)
             .Build();
 
@@ -122,7 +120,7 @@ public class UsersEndpointTests
         // Assert
         var response = await ResponseHelper.GetApiResultAsync<LoginResponseModel>(apiResponse);
         CheckResponse.Succeeded(response);
-        response.Result.Username.Should().Be(UserConstants.DefaultUserDb.Username);
+        response.Result.Email.Should().Be(UserConstants.DefaultUserDb.Email);
         response.Result.Email.Should().Be(UserConstants.DefaultUserDb.Email);
         response.Result.Token.Should().NotBeNullOrEmpty();
     }
@@ -133,7 +131,7 @@ public class UsersEndpointTests
         // Arrange
         var client = await _factory.CreateDefaultClientAsync();
         var loginUserModel = Builder<LoginUserModel>.CreateNew()
-            .With(cu => cu.Username = "NotExist")
+            .With(cu => cu.Email = "NotExist")
             .With(cu => cu.Password = "Password.1!")
             .Build();
 
@@ -152,7 +150,7 @@ public class UsersEndpointTests
         // Arrange
         var client = await _factory.CreateDefaultClientAsync();
         var loginUserModel = Builder<LoginUserModel>.CreateNew()
-            .With(cu => cu.Username = UserConstants.DefaultUserDb.Username)
+            .With(cu => cu.Password = UserConstants.DefaultUserDb.Password)
             .With(cu => cu.Password = "Password.1")
             .Build();
 

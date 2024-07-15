@@ -15,7 +15,7 @@ public class UsersController : ApiController
         _userService = userService;
     }
 
-    [HttpPost]
+    [HttpPost("register")]
     [AllowAnonymous]
     public async Task<IActionResult> RegisterAsync(CreateUserModel createUserModel)
     {
@@ -30,6 +30,7 @@ public class UsersController : ApiController
     }
 
     [HttpPost("confirmEmail")]
+    [AllowAnonymous]
     public async Task<IActionResult> ConfirmEmailAsync(ConfirmEmailModel confirmEmailModel)
     {
         return Ok(ApiResult<ConfirmEmailResponseModel>.Success(

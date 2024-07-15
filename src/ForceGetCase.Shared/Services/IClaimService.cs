@@ -1,4 +1,4 @@
-﻿namespace N_Tier.Shared.Services
+﻿namespace ForceGetCase.Shared.Services
 {
     public interface IClaimService
     {

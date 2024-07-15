@@ -16,7 +16,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         Context = context;
         DbSet = context.Set<TEntity>();
     }
-
+    
     public async Task<TEntity> AddAsync(TEntity entity)
     {
         var addedEntity = (await DbSet.AddAsync(entity)).Entity;
@@ -36,6 +36,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await DbSet.Where(predicate).ToListAsync();
+    }
+    
+    public async Task<List<TEntity>> GetAllAsync()
+    {
+        return await DbSet.ToListAsync();
     }
 
     public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)

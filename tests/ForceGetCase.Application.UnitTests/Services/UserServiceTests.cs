@@ -4,10 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using ForceGetCase.Application.Common.Email;
 using ForceGetCase.Application.Exceptions;
 using ForceGetCase.Application.Models.User;
-using ForceGetCase.Application.Services;
 using ForceGetCase.Application.Services.Impl;
 using ForceGetCase.DataAccess.Identity;
 using Microsoft.AspNetCore.Http;
@@ -20,10 +18,8 @@ namespace ForceGetCase.Application.UnitTests.Services;
 
 public class UserServiceTests : BaseServiceTestConfiguration
 {
-    private readonly IEmailService _emailService;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserService _sut;
-    private readonly ITemplateService _templateService;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public UserServiceTests()
@@ -35,15 +31,12 @@ public class UserServiceTests : BaseServiceTestConfiguration
         var userPrincipalFactory = Substitute.For<IUserClaimsPrincipalFactory<ApplicationUser>>();
         _signInManager = Substitute.For<SignInManager<ApplicationUser>>(_userManager, contextAccessor,
             userPrincipalFactory, null, null, null, null);
-        _templateService = Substitute.For<ITemplateService>();
-        _emailService = Substitute.For<IEmailService>();
-
-        _sut = new UserService(Mapper, _userManager, _signInManager, Configuration, _templateService,
-            _emailService);
+        
+        _sut = new UserService(Mapper, _userManager, _signInManager, Configuration);
     }
 
     [Fact]
-    public async Task CreateAsync_Should_Add_User_To_Database_And_Send_Confirmation_Email()
+    public async Task CreateAsync_Should_Add_User_To_Database()
     {
         // Arrange
         var createUserModel = Builder<CreateUserModel>.CreateNew().Build();
@@ -58,8 +51,6 @@ public class UserServiceTests : BaseServiceTestConfiguration
         result.Id.Should().Be(applicationUser.Id);
         await _userManager.Received(1).CreateAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>());
         await _userManager.Received(1).GenerateEmailConfirmationTokenAsync(Arg.Any<ApplicationUser>());
-        await _templateService.Received(1).GetTemplateAsync(Arg.Any<string>());
-        await _emailService.Received(1).SendEmailAsync(Arg.Any<EmailMessage>());
         await _userManager.Received(1).FindByNameAsync(Arg.Any<string>());
     }
 
@@ -102,7 +93,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         // Arrange
         var loginUserModel = Builder<LoginUserModel>.CreateNew().Build();
         var usersListQueryable = Builder<ApplicationUser>.CreateListOfSize(1)
-            .All().With(u => u.UserName = loginUserModel.Username)
+            .All().With(u => u.UserName = loginUserModel.Email)
             .Build().AsQueryable().BuildMock();
         _userManager.Users.Returns(usersListQueryable);
         _signInManager
@@ -125,7 +116,7 @@ public class UserServiceTests : BaseServiceTestConfiguration
         // Arrange
         var loginUserModel = Builder<LoginUserModel>.CreateNew().Build();
         var usersList = Builder<ApplicationUser>.CreateListOfSize(1).All()
-            .With(u => u.UserName = loginUserModel.Username).Build();
+            .With(u => u.UserName = loginUserModel.Email).Build();
         var usersListQueryable = usersList.AsQueryable().BuildMock();
         _userManager.Users.Returns(usersListQueryable);
         _signInManager
@@ -136,7 +127,6 @@ public class UserServiceTests : BaseServiceTestConfiguration
         var result = await _sut.LoginAsync(loginUserModel);
 
         // Assert
-        result.Username.Should().Be(usersList[0].UserName);
         result.Email.Should().Be(usersList[0].Email);
         result.Token.Should().NotBeNullOrEmpty();
         await _signInManager.Received(1).PasswordSignInAsync(Arg.Any<ApplicationUser>(), Arg.Any<string>(),

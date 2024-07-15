@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using N_Tier.Shared.Services;
-using N_Tier.Shared.Services.Impl;
+using ForceGetCase.Shared.Services;
+using ForceGetCase.Shared.Services.Impl;
 
 namespace ForceGetCase.Application;
 
@@ -25,9 +25,9 @@ public static class ApplicationDependencyInjection
 
     private static void AddServices(this IServiceCollection services, IWebHostEnvironment env)
     {
-        services.AddScoped<IWeatherForecastService, WeatherForecastService>();
-        services.AddScoped<ITodoListService, TodoListService>();
-        services.AddScoped<ITodoItemService, TodoItemService>();
+        services.AddScoped<ICalculationService, CalculationService>();
+        services.AddScoped<ICountryService, CountryService>();
+        services.AddScoped<IQuoteService, QuoteService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IClaimService, ClaimService>();
         services.AddScoped<ITemplateService, TemplateService>();

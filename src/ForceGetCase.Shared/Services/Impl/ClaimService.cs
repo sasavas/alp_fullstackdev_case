@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace N_Tier.Shared.Services.Impl
+namespace ForceGetCase.Shared.Services.Impl
 {
     public class ClaimService : IClaimService
     {

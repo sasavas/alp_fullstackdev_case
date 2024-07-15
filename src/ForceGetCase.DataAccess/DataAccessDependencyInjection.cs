@@ -25,8 +25,9 @@ public static class DataAccessDependencyInjection
 
     private static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ITodoItemRepository, TodoItemRepository>();
-        services.AddScoped<ITodoListRepository, TodoListRepository>();
+        services.AddScoped<ICountryRepository, CountryRepository>();
+        services.AddScoped<IDimensionRepository, DimensionRepository>();
+        services.AddScoped<IQuoteRepository, QuoteRepository>();
     }
 
     private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -36,12 +37,13 @@ public static class DataAccessDependencyInjection
         if (databaseConfig.UseInMemoryDatabase)
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseInMemoryDatabase("NTierDatabase");
+                options.UseInMemoryDatabase("ForceGetCaseDatabase");
                 options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             });
         else
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(databaseConfig.ConnectionString,
+                options.UseMySql(databaseConfig.ConnectionString,
+                    new MySqlServerVersion(new Version(8, 0, 21)),
                     opt => opt.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName)));
     }
 
@@ -52,25 +54,25 @@ public static class DataAccessDependencyInjection
 
         services.Configure<IdentityOptions>(options =>
         {
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequiredLength = 6;
-            options.Password.RequiredUniqueChars = 1;
+            // options.Password.RequireDigit = true;
+            // options.Password.RequireLowercase = true;
+            // options.Password.RequireNonAlphanumeric = true;
+            // options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 2;
+            // options.Password.RequiredUniqueChars = 1;
 
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.AllowedForNewUsers = true;
+            options.SignIn.RequireConfirmedEmail = false;
 
-            options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            // options.User.AllowedUserNameCharacters =
+            //     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
             options.User.RequireUniqueEmail = true;
         });
     }
 }
 
-// TODO move outside?
 public class DatabaseConfiguration
 {
     public bool UseInMemoryDatabase { get; set; }
