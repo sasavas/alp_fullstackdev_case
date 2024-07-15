@@ -1,0 +1,26 @@
+<nz-table #basicTable [nzData]="quotes" [nzLoading]="loading" nzBordered nzSize="middle">
+  <thead>
+    <tr>
+      <th nzWidth="100px">Mode</th>
+      <th nzWidth="100px">Movement Type</th>
+      <th nzWidth="100px">Incoterms</th>
+      <th nzWidth="100px">City</th>
+      <th nzWidth="100px">Package Type</th>
+      <th nzWidth="100px">Unit 1</th>
+      <th nzWidth="100px">Unit 2</th>
+      <th nzWidth="100px">Currency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let quote of basicTable.data">
+      <td>{{ quote.mode }}</td>
+      <td>{{ quote.movementType }}</td>
+      <td>{{ quote.incoterms }}</td>
+      <td>{{ quote.city }}</td>
+      <td>{{ quote.packageType }}</td>
+      <td>{{ quote.lengthUnit }}</td>
+      <td>{{ quote.weightUnit }}</td>
+      <td>{{ quote.currency }}</td>
+    </tr>
+  </tbody>
+</nz-table>

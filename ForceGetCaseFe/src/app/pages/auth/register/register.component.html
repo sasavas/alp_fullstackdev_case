@@ -1,0 +1,28 @@
+<form nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="email">Email</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
+      <!-- <nz-form-explain *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">Please input a valid email!</nz-form-explain> -->
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="password">Password</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input type="password" formControlName="password" id="password" placeholder="Enter your password" />
+      <!-- <nz-form-explain *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">Please input your password!</nz-form-explain> -->
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="confirmPassword">Confirm Password</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input type="password" formControlName="confirmPassword" id="confirmPassword" placeholder="Confirm your password" />
+      <!-- <nz-form-explain *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">Passwords do not match!</nz-form-explain> -->
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary" [disabled]="registerForm.invalid">Register</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,0 +1,160 @@
+<form nz-form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="mode" nzRequired>Mode</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="modeErrorTpl">
+      <nz-select formControlName="mode" id="mode" nzPlaceHolder="Select Mode">
+        @for (mode of config?.modes | keyvalue; track $index) {
+        <nz-option [nzValue]="mode.key" [nzLabel]="mode.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #modeErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a mode!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="movementType" nzRequired>
+      <span nz-tooltip nzTooltipTitle="prompt text" nzTooltipPlacement="bottomLeft"
+        [nzTooltipArrowPointAtCenter]="true"></span>
+      Movement Type
+      <span class="info-icon" nz-icon nzType="info-circle" nzTheme="outline" nz-tooltip
+        nzTooltipTitle="Please select movement type"></span>
+    </nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="movementTypeErrorTpl">
+      <nz-select formControlName="movementType" id="movementType" nzPlaceHolder="Select Movement Type">
+        @for (movementType of config?.movementTypes | keyvalue; track $index) {
+        <nz-option [nzValue]="movementType.key" [nzLabel]="movementType.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #movementTypeErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a movement type!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="incoterms" nzRequired>Incoterm</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="incotermErrorTpl">
+      <nz-select formControlName="incoterms" id="incoterms" nzPlaceHolder="Select Incoterm">
+        @for (incoterm of config?.incoterms | keyvalue; track $index) {
+        <nz-option [nzValue]="incoterm.key" [nzLabel]="incoterm.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #incotermErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select an incoterm!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="unit1" nzRequired>Length Unit</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="lengthUnitErrorTpl">
+      <nz-select formControlName="unit1" id="unit1" nzPlaceHolder="Select Length Unit">
+        @for (lengthUnit of config?.lengthUnits | keyvalue; track $index) {
+        <nz-option [nzValue]="lengthUnit.key" [nzLabel]="lengthUnit.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #lengthUnitErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a length unit!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="unit2" nzRequired>Weight Unit</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="weightUnitErrorTpl">
+      <nz-select formControlName="unit2" id="unit2" nzPlaceHolder="Select Weight Unit">
+        @for (weightUnit of config?.weightUnits | keyvalue; track $index) {
+        <nz-option [nzValue]="weightUnit.key" [nzLabel]="weightUnit.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #weightUnitErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a weight unit!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="currency" nzRequired>Currency</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="currencyErrorTpl">
+      <nz-select formControlName="currency" id="currency" nzPlaceHolder="Select Currency">
+        @for (currency of config?.currencies | keyvalue; track $index) {
+        <nz-option [nzValue]="currency.key" [nzLabel]="currency.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #currencyErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a currency!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="city" nzRequired>City</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="cityErrorTpl">
+      <nz-select formControlName="city" id="city" nzPlaceHolder="Select City">
+        @for (city of config?.cities | keyvalue; track $index) {
+        <nz-option [nzValue]="city.key" [nzLabel]="city.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #cityErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a city!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="packageType" nzRequired>Package Type</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="packageTypeErrorTpl">
+      <nz-select formControlName="packageType" id="packageType" nzPlaceHolder="Select Package Type">
+        @for (packageType of config?.packageTypes | keyvalue; track $index) {
+        <nz-option [nzValue]="packageType.key" [nzLabel]="packageType.value"></nz-option>
+        }
+      </nz-select>
+      <ng-template #packageTypeErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please select a package type!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="count" nzRequired>Count</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="countErrorTpl">
+      <input nz-input formControlName="count" id="count" type="number" placeholder="Enter the count" />
+      <ng-template #countErrorTpl let-control>
+        @if (control.errors?.['required']) {
+        Please enter a valid count!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+  @if(validationError){
+    <div class="validation-error">
+      {{ validationError }}
+    </div>
+  }
+
+  <nz-form-item>
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary" [disabled]="form.invalid">Submit Quote</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

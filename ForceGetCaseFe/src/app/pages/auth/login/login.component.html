@@ -1,0 +1,29 @@
+<form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="email">Email</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="emailError">
+      <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
+      <ng-template #emailError let-control>
+        @if(control.error?.['required']){
+          Please enter an email address!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="password">Password</nz-form-label>
+    <nz-form-control [nzSpan]="14" [nzErrorTip]="passwordError">
+      <input nz-input type="password" formControlName="password" id="password" placeholder="Enter your password" />
+      <ng-template #passwordError let-control>
+        @if(control.errors?.['required']){
+          Please enter your password!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary" [disabled]="loginForm.invalid">Login</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
