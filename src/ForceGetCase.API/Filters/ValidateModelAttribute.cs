@@ -1,6 +1,7 @@
 ﻿using ForceGetCase.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json;
 
 namespace ForceGetCase.API.Filters;
 
@@ -14,7 +15,7 @@ public class ValidateModelAttribute : Attribute, IAsyncResultFilter
                 .SelectMany(modelState => modelState.Errors)
                 .Select(modelError => modelError.ErrorMessage);
 
-            context.Result = new BadRequestObjectResult(ApiResult<string>.Failure(errors));
+            context.Result = new BadRequestObjectResult(JsonConvert.SerializeObject(ApiResult<string>.Failure(errors)));
         }
 
         await next();

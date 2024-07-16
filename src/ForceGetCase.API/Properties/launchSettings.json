@@ -17,9 +17,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "N_Tier.API": {
+    "ForceGetCase.API": {
       "commandName": "Project",
-      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

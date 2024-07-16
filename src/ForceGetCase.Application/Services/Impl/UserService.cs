@@ -50,10 +50,11 @@ public class UserService : IUserService
     public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == loginUserModel.Email);
-        user.UserName = user.Email;
         
         if (user == null)
             throw new NotFoundException("Username or password is incorrect");
+        
+        user.UserName = user.Email;
         
         if (await _userManager.IsLockedOutAsync(user))
             throw new BadRequestException("User is locked out");
