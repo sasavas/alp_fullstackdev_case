@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzFormModule, NzFormItemComponent, NzFormLabelComponent } from 'ng-zorro-antd/form';
 import { Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { CommonModule, KeyValuePipe } from '@angular/common';
 import { NzToolTipComponent, NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
+import { NzAutocompleteComponent, NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
   selector: 'app-quote-form',
@@ -28,13 +30,21 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
     NzToolTipModule,
     NzToolTipComponent,
     NzIconModule,
+    NzAutocompleteModule,
+    NzAutocompleteComponent,
+    NzInputModule,
   ]
 })
 export class QuoteFormComponent implements OnInit {
   form!: FormGroup;
   config: QuoteConfig | undefined;
   ready: boolean = false;
-  validationError: string | null = null; // Add this line
+  validationError: string | null = null;
+  butonDisabled: boolean = false;
+
+  cityOptions: KeyValuePair[] = [];
+  filteredCityOptions?: ValueLabelPair[] = [];
+  selectedCity?: KeyValuePair;
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +58,7 @@ export class QuoteFormComponent implements OnInit {
       mode: [null, [Validators.required]],
       movementType: [null, [Validators.required]],
       incoterms: [null, [Validators.required]],
-      city: [null, [Validators.required]],
+      city: [null, [Validators.required, this.validateCity.bind(this)]],
       packageType: [null, [Validators.required]],
       unit1: [null, [Validators.required]],
       unit2: [null, [Validators.required]],
@@ -59,6 +69,8 @@ export class QuoteFormComponent implements OnInit {
     this.quoteService.getConfig().subscribe({
       next: (config) => {
         this.config = config;
+        this.cityOptions = Object.entries(this.config.cities).map(([key, val]) => { return { key, value: val }; });
+        this.filteredCityOptions = this.cityOptions.map(opt => this.toValueLabel(opt));
         this.initializeFormWithConfig(config);
         this.ready = true;
       },
@@ -78,7 +90,6 @@ export class QuoteFormComponent implements OnInit {
       unit1: Object.keys(config.lengthUnits)[0],
       unit2: Object.keys(config.weightUnits)[0],
       currency: Object.keys(config.currencies)[0],
-      city: Object.keys(config.cities)[0],
       packageType: Object.keys(config.packageTypes)[0]
     });
   }
@@ -93,10 +104,8 @@ export class QuoteFormComponent implements OnInit {
         if (!response.valid) {
           this.validationError = response.reason;
           this.message.error('Validation failed: ' + response.reason);
-          this.form.get('count')?.setErrors({ invalid: true });
         } else {
           this.validationError = null;
-          this.form.get('count')?.setErrors(null);
         }
       },
       error: (error: any) => {
@@ -105,6 +114,40 @@ export class QuoteFormComponent implements OnInit {
         this.form.get('count')?.setErrors({ invalid: true });
       }
     });
+
+    this.form.get('city')?.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(value => this.filterCities(value));
+  }
+
+  onCityInput(event: Event): void {
+    const input = (event.target as HTMLInputElement).value;
+    this.filterCities(input);
+  }
+
+  filterCities(value: string): void {
+    this.filteredCityOptions = this.cityOptions.filter(
+      option => option.value.toLowerCase().includes(value.toLowerCase()))
+      .map(this.toValueLabel);
+  }
+
+  cityChanged(event: any) {
+    const selectedCity = this.filteredCityOptions?.find(option => option.value === event?.nzValue);
+    if (selectedCity) {
+      this.selectedCity = this.toKeyValue(selectedCity);
+      this.form.get('city')?.setValue(selectedCity ? selectedCity.value : null);
+    } else {
+      this.form.get('city')?.valid;
+    }
+  }
+
+  validateCity(control: AbstractControl): { [key: string]: any; } | null {
+    const city = this.cityOptions.find(option => option.key === control.value);
+    if (!city) {
+      return { invalidCity: true };
+    }
+    return null;
   }
 
   validateQuote() {
@@ -120,12 +163,13 @@ export class QuoteFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.butonDisabled = true;
     if (this.form.valid) {
       const quoteRequest: QuoteRequest = {
         mode: this.form.get('mode')?.value,
         movementType: this.form.get('movementType')?.value,
         incoterms: this.form.get('incoterms')?.value,
-        city: this.form.get('city')?.value,
+        city: parseInt(this.selectedCity?.key ?? "0"),
         packageType: this.form.get('packageType')?.value,
         unit1: this.form.get('unit1')?.value,
         unit2: this.form.get('unit2')?.value,
@@ -142,6 +186,9 @@ export class QuoteFormComponent implements OnInit {
         },
         error: (error) => {
           this.message.error('Quote request failed: ' + error.message);
+        },
+        complete: () => {
+          this.butonDisabled = false;
         }
       });
     } else {
@@ -152,4 +199,32 @@ export class QuoteFormComponent implements OnInit {
       });
     }
   }
+
+  toValueLabel(keyVal: KeyValuePair): ValueLabelPair {
+    let valLab: ValueLabelPair = {
+      value: keyVal.key,
+      label: keyVal.value,
+    };
+
+    return valLab;
+  }
+
+  toKeyValue(valLab: ValueLabelPair): KeyValuePair {
+    let keyVal: KeyValuePair = {
+      key: valLab.value,
+      value: valLab.label,
+    };
+
+    return keyVal;
+  }
 }
+
+type ValueLabelPair = {
+  value: string,
+  label: string,
+};
+
+type KeyValuePair = {
+  key: string,
+  value: string,
+};
