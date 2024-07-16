@@ -76,7 +76,6 @@ export class BaseHttpService {
   }
 
   private handleError(error: any): Observable<never> {
-    console.error(error);
     return throwError(() => new Error('Server error'));
   }
 }

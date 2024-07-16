@@ -14,5 +14,6 @@ import { SideMenuComponent } from './pages/main-app/side-menu/side-menu.componen
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  title = "ForceGetCase";
   isCollapsed = false;
 }

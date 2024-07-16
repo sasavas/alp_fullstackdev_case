@@ -17,7 +17,7 @@ describe('AppComponent', () => {
   it(`should have the 'ForceGetCaseFe' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ForceGetCaseFe');
+    expect(app.title).toEqual('ForceGetCase');
   });
 
   it('should render title', () => {

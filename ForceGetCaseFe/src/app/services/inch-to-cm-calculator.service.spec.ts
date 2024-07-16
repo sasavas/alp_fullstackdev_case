@@ -11,6 +11,7 @@ describe('InchToCmCalculatorService', () => {
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    let result = service.inchToCm(1);
+    expect(result).toBe(2.54);
   });
 });

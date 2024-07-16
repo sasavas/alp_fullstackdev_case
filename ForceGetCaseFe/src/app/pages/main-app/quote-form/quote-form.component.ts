@@ -60,7 +60,6 @@ export class QuoteFormComponent implements OnInit {
       next: (config) => {
         this.config = config;
         this.initializeFormWithConfig(config);
-        console.log("quote component", config);
         this.ready = true;
       },
       error: (error) => {
@@ -88,7 +87,6 @@ export class QuoteFormComponent implements OnInit {
     this.form.valueChanges.pipe(
       debounceTime(1000),
       distinctUntilChanged(),
-      tap(() => console.log("form valid", this.form.valid)),
       switchMap(() => this.validateQuote())
     ).subscribe({
       next: (response: QuoteValidationResult) => {
@@ -139,7 +137,7 @@ export class QuoteFormComponent implements OnInit {
         next: () => {
           this.message.success('Quote request sent successfully! Redirecting to results...', { nzDuration: 3000 });
           setTimeout(() => {
-            this.router.navigate(['/result'], { state: { data: quoteRequest } });
+            this.router.navigate(['/quote-list'], { state: { data: quoteRequest } });
           }, 3000);
         },
         error: (error) => {

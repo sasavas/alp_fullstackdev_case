@@ -4,6 +4,7 @@ import { RegisterComponent } from './pages/auth/register/register.component';
 import { QuoteListComponent } from './pages/main-app/quote-list/quote-list.component';
 import { QuoteFormComponent } from './pages/main-app/quote-form/quote-form.component';
 import { AuthGuard } from './services/auth.guard';
+import { ErrorComponent } from './pages/generic/error.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/quote' },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'quote', component: QuoteFormComponent, canActivate: [AuthGuard] },
   { path: 'quote-list', component: QuoteListComponent, canActivate: [AuthGuard] },
+  { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: '/error' }
 ];
