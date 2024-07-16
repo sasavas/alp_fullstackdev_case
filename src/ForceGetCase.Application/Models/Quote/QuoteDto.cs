@@ -4,8 +4,8 @@ public record class QuoteDto(
     string Mode,
     string MovementType,
     string Incoterms,
-    string LengthUnit,
-    string WeightUnit,
+    string Length,
+    string Weight,
     string Currency,
     string City,
     string PackageType

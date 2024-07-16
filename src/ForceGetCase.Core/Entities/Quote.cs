@@ -10,6 +10,8 @@ public class Quote : BaseEntity
     public int CountryCity { get; set; }
     public int PackageType { get; set; }
     public int Unit1 { get; set; }
+    public double Lenght { get; set; }
     public int Unit2 { get; set; }
+    public double Weight { get; set; }
     public int Currency { get; set; }
 }
