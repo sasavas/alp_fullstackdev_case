@@ -11,6 +11,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
 import { NzAutocompleteComponent, NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { InchToCmCalculatorService } from '../../../services/inch-to-cm-calculator.service';
 
 @Component({
   selector: 'app-quote-form',
@@ -45,12 +46,14 @@ export class QuoteFormComponent implements OnInit {
   cityOptions: KeyValuePair[] = [];
   filteredCityOptions?: ValueLabelPair[] = [];
   selectedCity?: KeyValuePair;
+  centimeter: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private quoteService: QuoteService,
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private inchToCmConverterService: InchToCmCalculatorService,
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +64,9 @@ export class QuoteFormComponent implements OnInit {
       city: [null, [Validators.required, this.validateCity.bind(this)]],
       packageType: [null, [Validators.required]],
       unit1: [null, [Validators.required]],
+      length: [null, [Validators.required, Validators.min(1)]],
       unit2: [null, [Validators.required]],
+      weight: [null, [Validators.required, Validators.min(1)]],
       currency: [null, [Validators.required]],
       count: [null, [Validators.required, Validators.min(1)]],
     });
@@ -88,7 +93,9 @@ export class QuoteFormComponent implements OnInit {
       movementType: Object.keys(config.movementTypes)[0],
       incoterms: Object.keys(config.incoterms)[0],
       unit1: Object.keys(config.lengthUnits)[0],
+      length: this.form.get('length')?.value,
       unit2: Object.keys(config.weightUnits)[0],
+      weight: this.form.get('weight')?.value,
       currency: Object.keys(config.currencies)[0],
       packageType: Object.keys(config.packageTypes)[0]
     });
@@ -119,6 +126,17 @@ export class QuoteFormComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(value => this.filterCities(value));
+
+    this.form.valueChanges.subscribe({
+      next: (value) => {
+        console.log(value);
+        if (value['unit1'] && value['length'] && value['unit1'] == 2) {
+          this.centimeter = this.inchToCmConverterService.inchToCm(value['length']);
+        } else {
+          this.centimeter = value['length'];
+        }
+      }
+    });
   }
 
   onCityInput(event: Event): void {
@@ -172,7 +190,9 @@ export class QuoteFormComponent implements OnInit {
         city: parseInt(this.selectedCity?.key ?? "0"),
         packageType: this.form.get('packageType')?.value,
         unit1: this.form.get('unit1')?.value,
+        length: this.form.get('length')?.value,
         unit2: this.form.get('unit2')?.value,
+        weight: this.form.get('weight')?.value,
         currency: this.form.get('currency')?.value,
         count: this.form.get('count')?.value,
       };

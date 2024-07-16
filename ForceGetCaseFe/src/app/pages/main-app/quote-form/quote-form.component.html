@@ -62,7 +62,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSpan]="6" nzFor="unit1" nzRequired>Length Unit</nz-form-label>
-    <nz-form-control [nzSpan]="14" [nzErrorTip]="lengthUnitErrorTpl">
+    <nz-form-control [nzSpan]="7" [nzErrorTip]="lengthUnitErrorTpl">
       <nz-select formControlName="unit1" id="unit1" nzPlaceHolder="Select Length Unit">
         @for (lengthUnit of config?.lengthUnits | keyvalue; track $index) {
         <nz-option [nzValue]="lengthUnit.key" [nzLabel]="lengthUnit.value"></nz-option>
@@ -74,11 +74,21 @@
         }
       </ng-template>
     </nz-form-control>
+    <nz-form-control [nzSpan]="4" [nzErrorTip]="lengthErrorTpl" class="col-2">
+      <input nz-input formControlName="length" id="length" type="number" placeholder="Enter the length" />
+      <ng-template #lengthErrorTpl let-control>
+        <ng-container *ngIf="control.errors?.['required']">Please enter a valid length!</ng-container>
+        <ng-container *ngIf="control.errors?.['min']">Length must be greater than 0!</ng-container>
+      </ng-template>
+    </nz-form-control>
+    <nz-form-control class="col-2" [nzSpan]="2">
+      {{centimeter}} cm
+    </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label [nzSpan]="6" nzFor="unit2" nzRequired>Weight Unit</nz-form-label>
-    <nz-form-control [nzSpan]="14" [nzErrorTip]="weightUnitErrorTpl">
+    <nz-form-control [nzSpan]="7" [nzErrorTip]="weightUnitErrorTpl">
       <nz-select formControlName="unit2" id="unit2" nzPlaceHolder="Select Weight Unit">
         @for (weightUnit of config?.weightUnits | keyvalue; track $index) {
         <nz-option [nzValue]="weightUnit.key" [nzLabel]="weightUnit.value"></nz-option>
@@ -88,6 +98,13 @@
         @if (control.errors?.['required']) {
         Please select a weight unit!
         }
+      </ng-template>
+    </nz-form-control>
+    <nz-form-control [nzSpan]="6" [nzErrorTip]="weightErrorTpl" class="col-2">
+      <input nz-input formControlName="weight" id="weight" type="number" placeholder="Enter the weight" />
+      <ng-template #weightErrorTpl let-control>
+        <ng-container *ngIf="control.errors?.['required']">Please enter a valid weight!</ng-container>
+        <ng-container *ngIf="control.errors?.['min']">Weight must be greater than 0!</ng-container>
       </ng-template>
     </nz-form-control>
   </nz-form-item>
@@ -111,9 +128,10 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="6" nzFor="city" nzRequired>Country City</nz-form-label>
     <nz-form-control [nzSpan]="14" [nzErrorTip]="cityErrorTpl">
-      <input placeholder="Type a Country/City Name" nz-input formControlName="city" (input)="onCityInput($event)" [nzAutocomplete]="auto" />
+      <input placeholder="Type a Country/City Name" nz-input formControlName="city" (input)="onCityInput($event)"
+        [nzAutocomplete]="auto" />
       <nz-autocomplete [nzDataSource]="filteredCityOptions" (selectionChange)="cityChanged($event)" #auto>
-        </nz-autocomplete>
+      </nz-autocomplete>
       <ng-template #cityErrorTpl let-control>
         @if(control.errors?.['required']){
         Please select a city!

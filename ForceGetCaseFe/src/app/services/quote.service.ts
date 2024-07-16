@@ -44,8 +44,8 @@ export interface QuoteDto {
   mode: string;
   movementType: string;
   incoterms: string;
-  lengthUnit: string;
-  weightUnit: string;
+  length: string;
+  weight: string;
   currency: string;
   city: string;
   packageType: string;
@@ -58,7 +58,9 @@ export interface QuoteRequest {
   city: number;
   packageType: number;
   unit1: number;
+  length: number;
   unit2: number;
+  weight: number;
   currency: number;
   count: number;
 }
